@@ -1,15 +1,32 @@
 import { Box, Button, Modal, TextField, Typography, Stack } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import { hideModalCreate, fecthAPIPostProductAdmin, valueName, valueDesp, valueIMAGE, valueBuyPrice, valueAmount, valuePhone, valueStatus, valuePromotion } from '../../action/action'
-import '../../App.css';
+import {
+    hideModalUpdate, fetchAPIUpdateProduct,
+    valueName, valueDesp, valueIMAGE, valueBuyPrice, valueAmount, valuePhone, valueStatus, valuePromotion, funcNameUpdate
+} from '../../action/action'
 
-const CreateModdal = () => {
+const UpdateModal = () => {
     const dispatch = useDispatch()
-    const { createModal, name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status } = useSelector((reduxData) => reduxData.shopReducers)
+
+    const { product, name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status, updateModal, objUpdate } = useSelector((reduxData) => reduxData.shopReducers)
 
     const hideModal = () => {
-        dispatch(hideModalCreate())
+        dispatch(hideModalUpdate())
     }
+
+    var id = objUpdate._id
+
+
+    const update = {
+        name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status
+    }
+    const reqUpdateProduct = (update) => {
+
+        console.log(update)
+        dispatch(fetchAPIUpdateProduct(id, update))
+
+    }
+
 
 
 
@@ -41,7 +58,7 @@ const CreateModdal = () => {
     const inputAmount = (event) => {
         const value = event.target.value
         dispatch(valueAmount(value))
-        console.log(value)
+
     }
 
     const inputPhone = (event) => {
@@ -68,26 +85,10 @@ const CreateModdal = () => {
         p: 4,
         height: 800
     }
-
-
-    const reqObjProduct = () => {
-        const newProduct = {
-            name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status
-
-        }
-        // hideModal()
-        
-        dispatch(fecthAPIPostProductAdmin(newProduct))
-        console.log(newProduct)
-        
-       
-    }
-
-
     return (
         <div>
             <Modal
-                open={createModal}
+                open={updateModal}
                 onClose={hideModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
@@ -96,45 +97,45 @@ const CreateModdal = () => {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Name
                     </Typography>
-                    <TextField id="outlined-basic" label="Name" variant="outlined" value={name} onChange={inputName} />
+                    <TextField required id="outlined-basic" label="Name" variant="outlined" defaultValue={objUpdate.name} onChange={inputName} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Description
                     </Typography>
-                    <TextField id="outlined-basic" label="Description" variant="outlined" value={description} onChange={inputDes} />
+                    <TextField id="outlined-basic" label="Description" variant="outlined" defaultValue={objUpdate.description} onChange={inputDes} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Image
                     </Typography>
-                    <TextField id="outlined-basic" label="Image" variant="outlined" value={imageUrl} onChange={inputImg} />
+                    <TextField id="outlined-basic" label="Image" variant="outlined" defaultValue={objUpdate.imageUrl} onChange={inputImg} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         BuyPrice
                     </Typography>
-                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" value={buyPrice} onChange={inputPrice} />
+                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.buyPrice} onChange={inputPrice} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Promotion Price
                     </Typography>
-                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" value={promotionPrice} onChange={inputPromotion} />
+                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.promotionPrice} onChange={inputPromotion} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Amount
                     </Typography>
-                    <TextField id="outlined-basic" label="Amount" variant="outlined" value={amount} onChange={inputAmount} />
+                    <TextField id="outlined-basic" label="Amount" variant="outlined" defaultValue={objUpdate.amount} onChange={inputAmount} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Phone
                     </Typography>
-                    <TextField id="outlined-basic" label="Phone" variant="outlined" value={phone} onChange={inputPhone} />
+                    <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={objUpdate.phone} onChange={inputPhone} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Trạng Thái
                     </Typography>
-                    <TextField id="outlined-basic" label="Trạng Thái" variant="outlined" value={status} onChange={inputStatus} />
+                    <TextField id="outlined-basic" label="Trạng Thái" variant="outlined" defaultValue={objUpdate.status} onChange={inputStatus} />
 
                     <Stack direction={"row"} spacing={2} marginTop={3} marginLeft={34}>
-                        <Button className="button-confirm" variant="contained" onClick={reqObjProduct}>CONFIRM</Button>
+                        <Button className="button-confirm" variant="contained" onClick={() => reqUpdateProduct(update)}>CONFIRM</Button>
                         <Button className="button-cancel" variant="contained" onClick={hideModal}>CANCEL</Button>
                     </Stack>
                 </Box>
@@ -143,4 +144,4 @@ const CreateModdal = () => {
     )
 }
 
-export default CreateModdal
+export default UpdateModal

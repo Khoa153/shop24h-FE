@@ -8,11 +8,11 @@ export const fetchAPIProduct = (page, limit, filter) => {
                 method: 'GET',
 
             }
-            
+
             await dispatch({
                 type: ISLOADING_PRODUCT
             })
-            
+
             const resProduct = await fetch('http://localhost:8080/product', reqProdcut)
 
             const data = await resProduct.json()
@@ -72,7 +72,58 @@ export const fecthAPIPostProductAdmin = (product) => {
     }
 }
 
+export const fetchAPIUpdateProduct = (id, product) => {
+    return async (dispatch) => {
+        try {
+            var reqUpdate = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(product)
+            }
 
+            const resUpdate = await fetch(`http://localhost:8080/product/${id}`, reqUpdate)
+
+            const dataUpdate = await resUpdate.json()
+
+            return dispatch({
+                type: 'PUT_PRODUCT',
+                data: dataUpdate
+            })
+        } catch (error) {
+            return dispatch({
+                type: 'PUT_PRODUCT_ERROR',
+                error: error
+            })
+        }
+    }
+}
+
+
+export const fetchAPIDeleteProduct = (id) => {
+    return async (dispatch) => {
+        try {
+            var reqDelete = {
+                method: 'DELETE'
+            }
+
+            const resDelete = await fetch(`http://localhost:8080/product/${id}`, reqDelete)
+
+            const dataDelete = await resDelete.json()
+
+            return dispatch({
+                type: 'DELETE_PRODUCT',
+                data: dataDelete
+            })
+        } catch (error) {
+            return dispatch({
+                type: 'DELETE_PRODUCT_ERROR',
+                error: error
+            })
+        }
+    }
+}
 
 
 export const pageChangePagination = (page) => {
@@ -84,7 +135,7 @@ export const pageChangePagination = (page) => {
 
 
 
-
+/* Login And Signup */
 export const fetchSignUp = (signup) => {
     return async (dispatch) => {
         try {
@@ -313,3 +364,34 @@ export const valueStatus = (value) => {
 
 
 
+/* Modal Update  Admin*/
+export const showModalUpdate = () => {
+    return {
+        type: 'SHOW_MODAL_UPDATE'
+
+    }
+}
+
+export const hideModalUpdate = () => {
+    return {
+        type: 'HIDE_MODAL_UPDATE'
+    }
+}
+
+export const updateObj = (value) => {
+    return {
+        type: 'UPDATE_OBJ',
+        payload: value
+    }
+}
+
+
+
+/* Filter */
+
+export const filterAdmin = (value) => {
+    return {
+        type: 'FILTER_ORDER',
+        payload: value
+    }
+}

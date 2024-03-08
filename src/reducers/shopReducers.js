@@ -1,27 +1,30 @@
 import { act } from 'react-dom/test-utils'
 import { USER_NAME_SUCCESS, PASSWORD_SUCCESS, CONFIRM_PASSWORD_SUCCESS, CREATE_USER_SUCCESS, LOGIN_USER_SUCCESS, PRODUCT_SUCCESS, ISLOADING_PRODUCT } from '../constant/constant'
+
 const initialState = {
     isLoading: false,
     product: [],
+    filterOrder: [],
+    /*Login And Singin */
     username: '',
     password: '',
     confirmpassword: '',
     accessToken: '',
     refreshToken: '',
     expiredDate: 0,
-    checkedBox: '',
+
     iphone: '',
     macbook: '',
-    itemPrice: [],
+    /* Pagination */
     limit: 9,
     page: 0,
     currentPage: 1,
     breadcrumbs: [],
     sessionProduct: [],
     isClick: false,
-    filter: '',
-    createModal: false,
 
+    /* Modal create Admin */
+    createModal: false,
     name: '',
     description: '',
     imageUrl: '',
@@ -30,7 +33,10 @@ const initialState = {
     amount: '',
     phone: '',
     status: '',
-
+    /* Modal update Admin */
+    updateModal: false,
+    objUpdate: {},
+    nameUpdate: ''
 }
 
 const shopReducers = (state = initialState, action) => {
@@ -47,6 +53,10 @@ const shopReducers = (state = initialState, action) => {
         case 'POST_PRODUCT':
             state.isLoading = false
             break
+        case 'PUT_PRODUCT':
+            state.isLoading = false
+            break
+        /* Login And Signin */
         case CREATE_USER_SUCCESS:
             state.isLoading = false
             break
@@ -72,9 +82,6 @@ const shopReducers = (state = initialState, action) => {
             state.iphone = action.payload
             state.macbook = action.payload
             break
-        case 'ITEM_PRICE':
-            state.itemPrice = action.payload
-            break
         case 'PAGE_CHANGE_PAGINATION':
             state.currentPage = action.payload
             break
@@ -84,7 +91,7 @@ const shopReducers = (state = initialState, action) => {
         case 'CLICK_COUNT':
             state.isClick = true
             break
-        /* Modal Admin */
+        /* Modal create Admin */
         case 'SHOW_MODAL':
             state.createModal = true
             break
@@ -116,6 +123,21 @@ const shopReducers = (state = initialState, action) => {
             break
         case 'STATUS_VALUE':
             state.status = action.payload
+            break
+        /* Modal update Admin */
+        case 'SHOW_MODAL_UPDATE':
+            state.updateModal = true
+            break
+        case 'HIDE_MODAL_UPDATE':
+            state.updateModal = false
+            break
+        case 'UPDATE_OBJ':
+            state.objUpdate = action.payload
+            break
+       
+        /*Filter Order Product */
+        case 'FILTER_ORDER':
+            state.filterOrder = action.payload
             break
         default:
             break;

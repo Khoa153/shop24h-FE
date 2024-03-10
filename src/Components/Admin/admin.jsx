@@ -4,24 +4,30 @@ import {
     Pagination, Paper, Table, TableBody, TableCell, TableContainer, TableHead,
     TableRow, Modal
 } from "@mui/material";
-import { useEffect } from "react";
-import { fetchAPIProduct, showModalCreate, pageChangePagination, showModalUpdate, updateObj, fetchAPIDeleteProduct, valueName } from '../../action/action'
+import { useEffect, useState } from "react";
+import { fetchAPIProduct, showModalCreate, pageChangePagination, showModalUpdate, updateObj, fetchAPIDeleteProduct, valueName, } from '../../action/action'
 import '../../App.css';
 
 import CreateModdal from "./createModal";
 import UpdateModal from "./updateModal";
 const Admin = () => {
     const dispatch = useDispatch()
-    const { product, page, limit, currentPage, isLoading, name } = useSelector((reduxData) => reduxData.shopReducers)
-
+    const { product, page, limit, currentPage, isLoading, selectObj } = useSelector((reduxData) => reduxData.shopReducers)
+    const [dataProduct, setDataProduct] = useState(product)
     useEffect(() => {
         dispatch(fetchAPIProduct(currentPage, limit))
     }, [currentPage])
 
+    const [selectedOrder, setSelectedOrder] = useState({})
+    const [productID , setProductID] = useState('')
     const handleShow = (value) => {
         console.log(value)
         dispatch(showModalUpdate())
         dispatch(updateObj(value))
+        setSelectedOrder(value)
+        setProductID(value._id)
+        console.log(productID)
+
     }
 
     const deleteOrder = (value) => {
@@ -38,6 +44,8 @@ const Admin = () => {
     const onShowModalCreate = () => {
         dispatch(showModalCreate())
     }
+
+
 
 
 
@@ -116,6 +124,8 @@ const Admin = () => {
 
                 <UpdateModal
                     handleShow={handleShow}
+                    order={selectedOrder}
+                   
                 />
 
             </Grid>

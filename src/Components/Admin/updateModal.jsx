@@ -1,77 +1,72 @@
 import { Box, Button, Modal, TextField, Typography, Stack } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
+import { useEffect, useState } from 'react';
 import {
     hideModalUpdate, fetchAPIUpdateProduct,
-    valueName, valueDesp, valueIMAGE, valueBuyPrice, valueAmount, valuePhone, valueStatus, valuePromotion, funcNameUpdate
+    valueName, valueDesp, valueIMAGE, valueBuyPrice, valueAmount, valuePhone, valueStatus, valuePromotion,
 } from '../../action/action'
 
-const UpdateModal = () => {
+
+const UpdateModal = ({ order }) => {
     const dispatch = useDispatch()
 
-    const { product, name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status, updateModal, objUpdate } = useSelector((reduxData) => reduxData.shopReducers)
+
+    const { product, updateModal, objUpdate } = useSelector((reduxData) => reduxData.shopReducers)
+    const [updatedData, setUpdatedData] = useState({})
+
+    useEffect(() => {
+        const state = { ...objUpdate }
+        setUpdatedData(state)
+
+    }, [objUpdate])
+
+
+
+    const [name, setName] = useState(updatedData.name)
+    const [description, setDescription] = useState(updatedData.description)
+    const [imageUrl, setImageUrl] = useState(updatedData.imageUrl)
+    const [buyPrice, setBuyPrice] = useState(updatedData.buyPrice)
+    const [amount, setAmount] = useState(updatedData.amount)
+    const [phone, setPhone] = useState(updatedData.phone)
+    const [promotionPrice, setPromotionPrice] = useState(updatedData.promotionPrice)
+    const [status, setStatus] = useState(updatedData.status)
+    console.log(updatedData.name)
+    // const changeData = () => {
+
+    //     setName(name)
+    //     setDescription(updatedData.description)
+    //     setImageUrl(updatedData.imageUrl)
+    //     setBuyPrice(updatedData.buyPrice)
+    //     setAmount(updatedData.amount)
+    //     setPhone(updatedData.phone)
+    //     setPromotionPrice(updatedData.promotionPrice)
+    //     setStatus(updatedData.status)
+
+
+    //     console.log(name)
+    //     console.log(description)
+    //     console.log(imageUrl)
+    // }
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedData({ ...updatedData, [name]: value })
+    };
+
+
+    var id = objUpdate._id
+    const reqUpdateProduct = () => {
+        // changeData()
+        var update = { name, description, imageUrl, buyPrice, amount, phone, promotionPrice, status }
+        // dispatch(fetchAPIUpdateProduct(id, update))
+
+        console.log(update)
+
+    }
+
 
     const hideModal = () => {
         dispatch(hideModalUpdate())
     }
-
-    var id = objUpdate._id
-
-
-    const update = {
-        name, description, imageUrl, buyPrice, promotionPrice, amount, phone, status
-    }
-    const reqUpdateProduct = (update) => {
-
-        console.log(update)
-        dispatch(fetchAPIUpdateProduct(id, update))
-
-    }
-
-
-
-
-    const inputName = (event) => {
-        const value = event.target.value
-        dispatch(valueName(value))
-    }
-
-    const inputDes = (event) => {
-        const value = event.target.value
-        dispatch(valueDesp(value))
-    }
-
-    const inputImg = (event) => {
-        const value = event.target.value
-        dispatch(valueIMAGE(value))
-    }
-
-    const inputPrice = (event) => {
-        const value = event.target.value
-        dispatch(valueBuyPrice(value))
-    }
-
-    const inputPromotion = (event) => {
-        const value = event.target.value
-        dispatch(valuePromotion(value))
-    }
-
-    const inputAmount = (event) => {
-        const value = event.target.value
-        dispatch(valueAmount(value))
-
-    }
-
-    const inputPhone = (event) => {
-        const value = event.target.value
-        dispatch(valuePhone(value))
-    }
-
-    const inputStatus = (event) => {
-        const value = event.target.value
-        dispatch(valueStatus(value))
-    }
-
-
 
     const style = {
         position: 'absolute',
@@ -97,45 +92,45 @@ const UpdateModal = () => {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Name
                     </Typography>
-                    <TextField required id="outlined-basic" label="Name" variant="outlined" defaultValue={objUpdate.name} onChange={inputName} />
+                    <TextField name='Name' id="outlined-basic" label="Name" variant="outlined" defaultValue={objUpdate.name} onChange={handleInputChange} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Description
                     </Typography>
-                    <TextField id="outlined-basic" label="Description" variant="outlined" defaultValue={objUpdate.description} onChange={inputDes} />
+                    <TextField name='Description' id="outlined-basic" label="Description" variant="outlined" defaultValue={objUpdate.description} onChange={(e) => setDescription(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Image
                     </Typography>
-                    <TextField id="outlined-basic" label="Image" variant="outlined" defaultValue={objUpdate.imageUrl} onChange={inputImg} />
+                    <TextField name='Image' id="outlined-basic" label="Image" variant="outlined" defaultValue={objUpdate.imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         BuyPrice
                     </Typography>
-                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.buyPrice} onChange={inputPrice} />
+                    <TextField name='BuyPrice' id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.buyPrice} onChange={(e) => setBuyPrice(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Promotion Price
                     </Typography>
-                    <TextField id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.promotionPrice} onChange={inputPromotion} />
+                    <TextField name='Promotion Price' id="outlined-basic" label="BuyPrice" variant="outlined" defaultValue={objUpdate.promotionPrice} onChange={(e) => setPromotionPrice(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Amount
                     </Typography>
-                    <TextField id="outlined-basic" label="Amount" variant="outlined" defaultValue={objUpdate.amount} onChange={inputAmount} />
+                    <TextField name='Amount' id="outlined-basic" label="Amount" variant="outlined" defaultValue={objUpdate.amount} onChange={(e) => setAmount(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Phone
                     </Typography>
-                    <TextField id="outlined-basic" label="Phone" variant="outlined" defaultValue={objUpdate.phone} onChange={inputPhone} />
+                    <TextField name='Phone' id="outlined-basic" label="Phone" variant="outlined" defaultValue={objUpdate.phone} onChange={(e) => setPhone(e.target.value)} />
 
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Trạng Thái
                     </Typography>
-                    <TextField id="outlined-basic" label="Trạng Thái" variant="outlined" defaultValue={objUpdate.status} onChange={inputStatus} />
+                    <TextField name='Status' id="outlined-basic" label="Trạng Thái" variant="outlined" defaultValue={objUpdate.status} onChange={(e) => setStatus(e.target.value)} />
 
                     <Stack direction={"row"} spacing={2} marginTop={3} marginLeft={34}>
-                        <Button className="button-confirm" variant="contained" onClick={() => reqUpdateProduct(update)}>CONFIRM</Button>
+                        <Button className="button-confirm" variant="contained" onClick={reqUpdateProduct}>CONFIRM</Button>
                         <Button className="button-cancel" variant="contained" onClick={hideModal}>CANCEL</Button>
                     </Stack>
                 </Box>

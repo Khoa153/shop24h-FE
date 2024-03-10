@@ -36,7 +36,8 @@ const initialState = {
     /* Modal update Admin */
     updateModal: false,
     objUpdate: {},
-    nameUpdate: ''
+    selectObj: null
+
 }
 
 const shopReducers = (state = initialState, action) => {
@@ -52,6 +53,13 @@ const shopReducers = (state = initialState, action) => {
             break
         case 'POST_PRODUCT':
             state.isLoading = false
+            const { id, object } = action.payload
+            const updateProduct = state.product.map((order) =>
+                order.id === id ? { ...order, ...object } : order);
+            return {
+                ...state,
+                orders: updateProduct,
+            };
             break
         case 'PUT_PRODUCT':
             state.isLoading = false
@@ -134,7 +142,7 @@ const shopReducers = (state = initialState, action) => {
         case 'UPDATE_OBJ':
             state.objUpdate = action.payload
             break
-       
+
         /*Filter Order Product */
         case 'FILTER_ORDER':
             state.filterOrder = action.payload

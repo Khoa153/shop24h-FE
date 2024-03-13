@@ -4,7 +4,7 @@ import { USER_NAME_SUCCESS, PASSWORD_SUCCESS, CONFIRM_PASSWORD_SUCCESS, CREATE_U
 const initialState = {
     isLoading: false,
     product: [],
-    filterOrder: [],
+    filterProduct: [],
     /*Login And Singin */
     username: '',
     password: '',
@@ -35,8 +35,7 @@ const initialState = {
     status: '',
     /* Modal update Admin */
     updateModal: false,
-    objUpdate: {},
-    selectObj: null
+    objUpdate: {}
 
 }
 
@@ -49,17 +48,11 @@ const shopReducers = (state = initialState, action) => {
             state.isLoading = false
             state.page = Math.ceil(action.data / state.limit)
             state.product = action.totalProduct
-            state.filter = action.payload
+            
+            // state.filter = action.payload
             break
         case 'POST_PRODUCT':
             state.isLoading = false
-            const { id, object } = action.payload
-            const updateProduct = state.product.map((order) =>
-                order.id === id ? { ...order, ...object } : order);
-            return {
-                ...state,
-                orders: updateProduct,
-            };
             break
         case 'PUT_PRODUCT':
             state.isLoading = false
@@ -145,7 +138,7 @@ const shopReducers = (state = initialState, action) => {
 
         /*Filter Order Product */
         case 'FILTER_ORDER':
-            state.filterOrder = action.payload
+            state.filterProduct = action.filter
             break
         default:
             break;

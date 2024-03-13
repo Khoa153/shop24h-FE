@@ -1,7 +1,9 @@
 import { USER_NAME_SUCCESS, PASSWORD_SUCCESS, CONFIRM_PASSWORD_SUCCESS, CREATE_USER_SUCCESS, LOGIN_USER_SUCCESS, ISLOADING_PRODUCT, PRODUCT_SUCCESS } from '../constant/constant'
 import shopReducers from '../reducers/shopReducers'
+import { useEffect, useState } from "react";
 
-export const fetchAPIProduct = (page, limit, filter) => {
+/*API GET ALL  */
+export const fetchAPIProduct = (page, limit) => {
     return async (dispatch) => {
         try {
             var reqProdcut = {
@@ -19,15 +21,21 @@ export const fetchAPIProduct = (page, limit, filter) => {
 
             const dataProduct = data.data
 
-
             const resPagination = await fetch(`http://localhost:8080/pagination?page=${page}&limit=${limit}`, reqProdcut)
 
             const dataPagination = await resPagination.json()
+            
 
+
+            console.log(dataProduct)
+
+            // const result = dataProduct.filter((item) => item.description.toLowerCase().includes())
             return dispatch({
                 type: PRODUCT_SUCCESS,
                 data: dataProduct.length,
                 totalProduct: dataPagination,
+
+
 
             })
 
@@ -72,31 +80,27 @@ export const fecthAPIPostProductAdmin = (product) => {
     }
 }
 
-export const fetchAPIUpdateProduct = (id, product) => {
-    return async (dispatch) => {
-        try {
-            var reqUpdate = {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(product)
-            }
+export const fetchAPIUpdateProduct = (product) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-            const resUpdate = await fetch(`http://localhost:8080/product/${id}`, reqUpdate)
+    const raw = JSON.stringify(product);
 
-            const dataUpdate = await resUpdate.json()
+    const requestOptions = {
+        method: "PUT",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
 
-            return dispatch({
-                type: 'PUT_PRODUCT',
-                data: dataUpdate
-            })
-        } catch (error) {
-            return dispatch({
-                type: 'PUT_PRODUCT_ERROR',
-                error: error
-            })
-        }
+    const resUpdate = fetch(`http://localhost:8080/product/${product._id}`, requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+
+    return {
+        type: 'PUT_PRODUCT',
+        payload: []
     }
 }
 

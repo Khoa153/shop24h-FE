@@ -5,30 +5,31 @@ import {
     TableRow, Modal
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { fetchAPIProduct, showModalCreate, pageChangePagination, showModalUpdate, updateObj, fetchAPIDeleteProduct, valueName, } from '../../action/action'
+import { fetchAPIProduct, showModalCreate, pageChangePagination, showModalUpdate, updateObj, fetchAPIDeleteProduct, filterAdmin } from '../../action/action'
 import '../../App.css';
 
 import CreateModdal from "./createModal";
 import UpdateModal from "./updateModal";
 const Admin = () => {
     const dispatch = useDispatch()
-    const { product, page, limit, currentPage, isLoading, selectObj } = useSelector((reduxData) => reduxData.shopReducers)
-    const [dataProduct, setDataProduct] = useState(product)
+    const { product, page, limit, currentPage, isLoading } = useSelector((reduxData) => reduxData.shopReducers)
+
+    const [record, setRecord] = useState([])
+
     useEffect(() => {
         dispatch(fetchAPIProduct(currentPage, limit))
+        
+        
     }, [currentPage])
 
-    const [selectedOrder, setSelectedOrder] = useState({})
-    const [productID , setProductID] = useState('')
+
     const handleShow = (value) => {
         console.log(value)
         dispatch(showModalUpdate())
         dispatch(updateObj(value))
-        setSelectedOrder(value)
-        setProductID(value._id)
-        console.log(productID)
 
     }
+
 
     const deleteOrder = (value) => {
         console.log(value)
@@ -44,9 +45,13 @@ const Admin = () => {
     const onShowModalCreate = () => {
         dispatch(showModalCreate())
     }
-
-
-
+    // const filteredData = product.filter((item) => item.name.toLowerCase().includes(filter.toLowerCase()))
+    const handleSeachChange = (e) => {
+        
+        setRecord(product.filter((item) => item.name.toLowerCase().includes(e.target.value)))
+        console.log(product)
+        console.log(record)
+    }
 
 
     return (
@@ -59,7 +64,7 @@ const Admin = () => {
                 </div>
 
                 <div className="form-seach">
-                    <input className='input-seach' type='text' placeholder='Seach' />
+                    <input className='input-seach' type='text' placeholder='Seach' onChange={handleSeachChange} />
                     <label className='form-label'>Seach</label>
                 </div>
 
@@ -90,12 +95,10 @@ const Admin = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {product.map((element, index) => (
+                                        {record.map((element, index) => (
                                             <TableRow
                                                 key={index}
-
                                             >
-
                                                 <TableCell align="left">{element.name}</TableCell>
                                                 <TableCell align="left">{element.description}</TableCell>
                                                 <TableCell align="left"><img src={element.imageUrl} style={{ width: '80px', height: '50px' }} /></TableCell>
@@ -124,8 +127,6 @@ const Admin = () => {
 
                 <UpdateModal
                     handleShow={handleShow}
-                    order={selectedOrder}
-                   
                 />
 
             </Grid>
